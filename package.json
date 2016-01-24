@@ -1,0 +1,26 @@
+{
+  "name": "drone-sftp",
+  "version": "1.0.0",
+  "description": "Drone plugin for uploading files to an SFTP server",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/athieriot/drone-sftp.git"
+  },
+  "keywords": [
+    "drone",
+    "sftp"
+  ],
+  "author": "Aurélien Thieriot",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/athieriot/drone-sftp/issues"
+  },
+  "homepage": "https://github.com/athieriot/drone-sftp#README.md",
+  "dependencies": {
+    "drone-node": "^1.0.1",
+    "promise-ftp-common": "^1.1.5",
+    "promise-sftp": "^0.9.5",
+    "shelljs": "^0.5.3"
+  }
+}
