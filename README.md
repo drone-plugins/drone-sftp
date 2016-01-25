@@ -27,7 +27,7 @@ Drone plugin for uploading files to an SFTP server
                 "port": 2222,
                 "username": "username",
                 "password": "pa$$word", 
-                "destination_path": "/share"
+                "destination_path": "/share",
                 "files": [
                     "*.md"
                 ]

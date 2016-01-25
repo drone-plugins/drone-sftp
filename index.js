@@ -34,6 +34,7 @@ const do_upload = function (workspace, vargs) {
     }).catch(function(err) {
 
       console.log('An error happened: ' + err);
+      process.exit(2)
     }).then(function() {
 
       sftp.logout();

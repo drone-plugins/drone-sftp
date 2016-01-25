@@ -5,18 +5,19 @@ build:
 
 publish:
   docker:
-    username: athieriot
+    username: $$DOCKER_USER
     password: $$DOCKER_PASS
     email: $$DOCKER_EMAIL
-    repo: athieriot/drone-artifactory
+    repo: plugins/drone-sftp
+    tag: latest
     when:
       branch: master
 
 plugin:
-  name: Artifactory
-  desc: Publish Artifacts to Artifactory
+  name: Sftp
+  desc: Publish files to an SFTP server
   type: publish
-  image: athieriot/drone-artifactory
+  image: plugin/drone-sftp
   labels:
     - publish
-    - artifactory
+    - sftp
