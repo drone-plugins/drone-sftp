@@ -4,10 +4,11 @@ You can override the default configuration with the following parameters:
 * `host` - Server host
 * `port` - Server port, default to 22
 * `username` - Server username, default to blank
-* `password` - Password for password-based authentication, default to blank
+* `password` - Password for password-based authentication
+* `privateKey` - String containing the private key for key-based authentication
+* `privateKeyFile` - Path to a private key (Used in conjonction with `volumes`) for key-based authentication
 * `destination_path` - Target path on the server, default to '/'
 * `files` - List of files to upload
-//TODO: Private Key based authentication
 
 All file paths must be relative to current project sources
 

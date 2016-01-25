@@ -20,15 +20,16 @@ Drone plugin for uploading files to an SFTP server
             },
             "workspace": {
                 "root": "/drone/src",
-                "path": "/drone/src/github.com/drone/drone"
+                "path": "/drone/src/athieriot/drone-sftp"
             },
             "vargs": {
                 "host": "sftp.company.com",
                 "port": 2222,
                 "username": "username",
-                "password": "password", 
+                "password": "pa$$word", 
+                "destination_path": "/share"
                 "files": [
-                    "*.nuget"
+                    "*.md"
                 ]
             }
         }
