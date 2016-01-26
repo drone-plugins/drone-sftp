@@ -17,7 +17,6 @@ The following is a sample configuration in your .drone.yml file:
 ```yaml
 publish:
   sftp:
-    image: athieriot/drone-sftp
     host: sftp.company.com
     port: 2222
     username: user

@@ -17,7 +17,7 @@ plugin:
   name: Sftp
   desc: Publish files to an SFTP server
   type: publish
-  image: plugin/drone-sftp
+  image: plugins/drone-sftp
   labels:
     - publish
     - sftp
