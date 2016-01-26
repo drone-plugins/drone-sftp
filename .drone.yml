@@ -1,0 +1,23 @@
+build:
+  image: node:4.2
+  commands:
+    - npm install
+
+publish:
+  docker:
+    username: $$DOCKER_USER
+    password: $$DOCKER_PASS
+    email: $$DOCKER_EMAIL
+    repo: plugins/drone-sftp
+    tag: latest
+    when:
+      branch: master
+
+plugin:
+  name: Sftp
+  desc: Publish files to an SFTP server
+  type: publish
+  image: plugins/drone-sftp
+  labels:
+    - publish
+    - sftp
