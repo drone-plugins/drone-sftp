@@ -17,8 +17,7 @@ const do_upload = function (workspace, vargs) {
       port: vargs.port,
       username: vargs.username,
       password: vargs.password,
-      privateKey: vargs.privateKey,
-      privateKeyFile: vargs.privateKeyFile
+      privateKey: workspace.keys.private
     }).then(function (greetings) {
       console.log('Connection successful. ' + (greetings || ''));
      
