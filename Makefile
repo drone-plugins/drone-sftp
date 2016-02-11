@@ -3,7 +3,7 @@
 IMAGE ?= plugins/drone-nuget
 
 install:
-	npm install
+	npm install --quiet
 
 test:
 	@echo "Currently we don't provide test cases!"
