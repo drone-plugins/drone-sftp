@@ -1,6 +1,6 @@
 .PHONY: all install test docker
 
-IMAGE ?= plugins/drone-nuget
+IMAGE ?= plugins/drone-sftp
 
 all: install test
 
