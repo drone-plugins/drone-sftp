@@ -4,7 +4,7 @@
 [![Coverage Status](https://aircover.co/badges/drone-plugins/drone-sftp/coverage.svg)](https://aircover.co/drone-plugins/drone-sftp)
 [![](https://badge.imagelayers.io/plugins/drone-sftp:latest.svg)](https://imagelayers.io/?images=plugins/drone-sftp:latest 'Get your own badge on imagelayers.io')
 
-Drone plugin to publish files and artifacts via SFTP
+Drone plugin to publish files and artifacts via SFTP. For the usage information and a listing of the available options please take a look at [the docs](DOCS.md).
 
 ## Execute
 

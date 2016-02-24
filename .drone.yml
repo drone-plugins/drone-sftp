@@ -6,6 +6,8 @@ build:
 
 publish:
   coverage:
+    # Must match parts of the absolute path
+    include: drone-sftp/coverage/lcov.info
     when:
       branch: master
   docker:
