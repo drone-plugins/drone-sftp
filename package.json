@@ -21,6 +21,6 @@
     "drone-node": "^1.0.1",
     "promise-ftp-common": "^1.1.5",
     "promise-sftp": "^0.9.5",
-    "shelljs": "^0.5.3"
+    "shelljs": "^0.8.0"
   }
 }
