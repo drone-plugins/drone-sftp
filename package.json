@@ -18,7 +18,7 @@
   },
   "homepage": "https://github.com/drone-plugins/drone-sftp#README.md",
   "dependencies": {
-    "drone-node": "^1.0.1",
+    "drone-node": "^2.0.0",
     "promise-ftp-common": "^1.1.5",
     "promise-sftp": "^0.9.5",
     "shelljs": "^0.5.3"
