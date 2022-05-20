@@ -1,5 +1,5 @@
 build:
-  image: node:4.2
+  image: node:18.2
   commands:
     - make install
     - make test
