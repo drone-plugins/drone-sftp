@@ -1,0 +1,14 @@
+{
+    "uploadTo":"sftp.company.com:2222",
+    "url":"sftp://sftp.company.com:2222",
+    "uploads":[
+        {
+            "name":"Bar.nupkg",
+            "size":"50 MB"
+        },
+        {
+            "name":"Foo.nupkg",
+            "size":"3.5 MB"
+        }
+    ]
+}
