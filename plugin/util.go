@@ -9,10 +9,10 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"io"
-	"io/ioutil"
 	"os"
 )
 
+//nolint:errcheck
 func writeCard(path string, card interface{}) {
 	data, _ := json.Marshal(card)
 	switch {
@@ -21,10 +21,11 @@ func writeCard(path string, card interface{}) {
 	case path == "/dev/stderr":
 		writeCardTo(os.Stderr, data)
 	case path != "":
-		ioutil.WriteFile(path, data, 0644)
+		os.WriteFile(path, data, 0644) //nolint:gomnd
 	}
 }
 
+//nolint:errcheck
 func writeCardTo(out io.Writer, data []byte) {
 	encoded := base64.StdEncoding.EncodeToString(data)
 	io.WriteString(out, "\u001B]1338;")
