@@ -1,2 +1,5 @@
-node_modules/
-coverage/
+/release/
+/drone-sftp*
+
+coverage.out
+.drone.yml

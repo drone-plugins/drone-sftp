@@ -1,0 +1,109 @@
+{
+    "type": "AdaptiveCard",
+    "body": [
+        {
+            "type": "ColumnSet",
+            "columns": [
+                {
+                    "type": "Column",
+                    "items": [
+                        {
+                            "type": "Image",
+                            "url": "https://plugins.drone.io/logos/term.svg",
+                            "size": "Small"
+                        }
+                    ],
+                    "width": "auto"
+                },
+                {
+                    "type": "Column",
+                    "items": [
+                        {
+                            "type": "TextBlock",
+                            "text": "Plugin: Drone SFTP",
+                            "wrap": true,
+                            "size": "Small",
+                            "weight": "Bolder",
+                            "isSubtle": false,
+                            "spacing": "Small"
+                        },
+                        {
+                            "type": "TextBlock",
+                            "text": "UPLOAD: ${UploadTo}",
+                            "wrap": true,
+                            "size": "Small",
+                            "weight": "Lighter",
+                            "isSubtle": true,
+                            "spacing": "Small"
+                        }
+                    ],
+                    "width": "stretch"
+                }
+            ],
+            "style": "default"
+        },
+        {
+            "type": "ColumnSet",
+            "columns": [
+                {
+                    "type": "Column",
+                    "items": [
+                        {
+                            "type": "TextBlock",
+                            "weight": "Lighter",
+                            "text": "FILE",
+                            "wrap": true,
+                            "size": "Small",
+                            "isSubtle": true,
+                            "spacing": "Medium"
+                        },
+                        {
+                            "type": "TextBlock",
+                            "spacing": "Small",
+                            "text": "${name}",
+                            "wrap": true,
+                            "weight": "Bolder"
+                        }
+                    ],
+                    "separator": true,
+                    "width": "stretch"
+                },
+                {
+                    "type": "Column",
+                    "items": [
+                        {
+                            "type": "TextBlock",
+                            "weight": "Lighter",
+                            "text": "SIZE",
+                            "wrap": true,
+                            "size": "Small",
+                            "isSubtle": true
+                        },
+                        {
+                            "type": "TextBlock",
+                            "spacing": "Small",
+                            "text": "${size}",
+                            "wrap": true,
+                            "weight": "Bolder"
+                        }
+                    ],
+                    "width": "100px",
+                    "separator": true,
+                    "spacing": "Medium"
+                }
+            ],
+            "style": "default",
+            "separator": true,
+            "$data": "${uploads}"
+        }
+    ],
+    "actions": [
+        {
+            "type": "Action.OpenUrl",
+            "title": "Go to SFTP site",
+            "url": "${url}"
+        }
+    ],
+    "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+    "version": "1.5"
+}
