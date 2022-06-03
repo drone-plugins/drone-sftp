@@ -212,10 +212,10 @@ def windows(ctx, version):
             {
                 "name": "docker",
                 "environment": {
-                    "USERNAME": {
+                    "username": {
                         "from_secret": "docker_username",
                     },
-                    "PASSWORD": {
+                    "password": {
                         "from_secret": "docker_password",
                     },
                 },
