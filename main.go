@@ -7,6 +7,7 @@ package main
 
 import (
 	"context"
+	"os"
 
 	"github.com/drone-plugins/drone-sftp/plugin"
 
@@ -15,6 +16,15 @@ import (
 )
 
 func main() {
+	// TODO: Remove when docker runner works on Windows
+	argCount := len(os.Args)
+	if argCount != 1 {
+		if argCount == 2 && os.Args[1] == "--help" {
+			os.Exit(0)
+		}
+		os.Exit(1)
+	}
+
 	logrus.SetFormatter(new(formatter))
 
 	var args plugin.Args
