@@ -183,6 +183,10 @@ pool:
   use: ubuntu
 
 steps:
+- name: mkdir
+  image: alpine
+  commmands: 
+  - mkdir -p /tmp/aws/drone/src/
 - name: manifest
   image: plugins/manifest:1.2
   settings:
