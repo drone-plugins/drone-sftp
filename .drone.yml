@@ -160,17 +160,10 @@ steps:
     auto_tag_suffix: windows-1809-amd64
     daemon_off: true
     purge: false
-  volumes:
-  - name: docker_pipe
-    path: \\\\.\\pipe\\docker_engine
   when:
     ref:
     - refs/heads/master
     - refs/tags/**
-volumes:
-- name: docker_pipe
-  host:
-    path: \\\\.\\pipe\\docker_engine
 depends_on:
 - testing
 trigger:
