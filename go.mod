@@ -8,7 +8,7 @@ require (
 	github.com/kelseyhightower/envconfig v1.4.0
 	github.com/pkg/sftp v1.13.5
 	github.com/sirupsen/logrus v1.9.0
-	golang.org/x/crypto v0.0.0-20220919173607-35f4265a4bc0
+	golang.org/x/crypto v0.0.0-20220924013350-4ba4fb4dd9e7
 )
 
 require (
