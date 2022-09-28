@@ -1,9 +1,0 @@
-FROM plugins/base:multiarch@sha256:80468ccf6628245e6cf4908224fe5c4e6743fd4ead247be367fd5dc351ea093a
-
-LABEL maintainer="Drone.IO Community <drone-dev@googlegroups.com>" \
-  org.label-schema.name="Drone GitHub Release" \
-  org.label-schema.vendor="Drone.IO Community" \
-  org.label-schema.schema-version="1.0"
-
-ADD release/linux/arm/drone-sftp /bin/
-ENTRYPOINT [ "/bin/drone-sftp" ]
