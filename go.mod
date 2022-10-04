@@ -1,6 +1,6 @@
 module github.com/drone-plugins/drone-sftp
 
-go 1.18
+go 1.19
 
 require (
 	github.com/drone/drone-go v1.7.1
@@ -13,6 +13,6 @@ require (
 
 require (
 	github.com/kr/fs v0.1.0 // indirect
-	golang.org/x/sys v0.0.0-20220715151400-c0bba94af5f8 // indirect
+	golang.org/x/sys v0.0.0-20220928140112-f11e5e49a4ec // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
