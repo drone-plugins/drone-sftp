@@ -1,5 +1,5 @@
 # escape=`
-FROM plugins/base:windows-1809-amd64@sha256:fb826942a6f4111c67cb94070b8ee6d2486ca1e14293901673cbc2b7b1d14c09
+FROM plugins/base:windows-1809-amd64@sha256:9c93a1f338754b075890014cc9ab48a3f5ee2461dae1ead60f89e646f726dce9
 
 LABEL maintainer="Drone.IO Community <drone-dev@googlegroups.com>" `
   org.label-schema.name="Drone GitHub Release" `
