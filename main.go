@@ -6,7 +6,6 @@
 package main
 
 import (
-	"context"
 	"os"
 
 	"github.com/drone-plugins/drone-sftp/plugin"
@@ -41,7 +40,7 @@ func main() {
 		logrus.SetLevel(logrus.TraceLevel)
 	}
 
-	if err := plugin.Exec(context.Background(), &args); err != nil {
+	if err := plugin.Exec(&args); err != nil {
 		logrus.Fatalln(err)
 	}
 }
