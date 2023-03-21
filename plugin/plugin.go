@@ -6,7 +6,6 @@
 package plugin
 
 import (
-	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -56,7 +55,7 @@ const (
 var errConfiguration = errors.New("configuration error")
 
 // Exec executes the plugin.
-func Exec(ctx context.Context, args *Args) error {
+func Exec(args *Args) error {
 	err := verifyArgs(args)
 	if err != nil {
 		return fmt.Errorf("error in the configuration: %w", err)
