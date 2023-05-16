@@ -7,7 +7,7 @@ require (
 	github.com/dustin/go-humanize v1.0.1
 	github.com/kelseyhightower/envconfig v1.4.0
 	github.com/pkg/sftp v1.13.5
-	github.com/sirupsen/logrus v1.9.0
+	github.com/sirupsen/logrus v1.9.1
 	golang.org/x/crypto v0.9.0
 )
 
