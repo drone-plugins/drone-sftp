@@ -1,0 +1,381 @@
+pipeline:
+  projectIdentifier: Drone_Plugins
+  orgIdentifier: default
+  tags: {}
+  properties:
+    ci:
+      codebase:
+        connectorRef: GitHub_Drone_Plugins_Org
+        repoName: drone-sftp
+        build: <+input>
+        sparseCheckout: []
+  stages:
+    - stage:
+        name: Test
+        identifier: Test
+        description: ""
+        type: CI
+        spec:
+          cloneCodebase: true
+          caching:
+            enabled: false
+            paths: []
+          platform:
+            os: Linux
+            arch: Amd64
+          runtime:
+            type: Cloud
+            spec: {}
+          execution:
+            steps:
+              - step:
+                  type: Run
+                  name: Lint
+                  identifier: Lint
+                  spec:
+                    connectorRef: Plugins_Docker_Hub_Connector
+                    image: golang:1.21
+                    shell: Sh
+                    command: |-
+                      go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
+                      golangci-lint version
+                      golangci-lint run
+              - step:
+                  type: Run
+                  name: Testing
+                  identifier: Testing
+                  spec:
+                    connectorRef: Plugins_Docker_Hub_Connector
+                    image: golang:1.21
+                    shell: Sh
+                    command: go test -cover ./...
+    - parallel:
+        - stage:
+            name: linux-amd64
+            identifier: linuxamd64
+            description: ""
+            type: CI
+            spec:
+              cloneCodebase: true
+              caching:
+                enabled: false
+                paths: []
+              platform:
+                os: Linux
+                arch: Amd64
+              runtime:
+                type: Cloud
+                spec: {}
+              execution:
+                steps:
+                  - step:
+                      type: Run
+                      name: Build Binary
+                      identifier: Run_1
+                      spec:
+                        connectorRef: Plugins_Docker_Hub_Connector
+                        image: golang:1.21
+                        shell: Sh
+                        command: |-
+                          # force go modules
+                          export GOPATH=""
+
+                          # disable cgo
+                          export CGO_ENABLED=0
+
+                          set -e
+                          set -x
+
+                          # linux
+                          export GOOS=linux GOARCH=amd64
+
+                          go build -v -a -tags netgo -o release/linux/amd64/drone-sftp .
+                  - step:
+                      type: Plugin
+                      name: Build and Push on Tag
+                      identifier: Plugin_1
+                      spec:
+                        connectorRef: Plugins_Docker_Hub_Connector
+                        image: plugins/docker
+                        settings:
+                          username: drone
+                          password: <+secrets.getValue("Plugins_Docker_Hub_Pat")>
+                          repo: plugins/sftp
+                          dockerfile: docker/Dockerfile.linux.amd64
+                          auto_tag: "true"
+                          auto_tag_suffix: linux-amd64
+                      when:
+                        stageStatus: Success
+                        condition: <+codebase.build.type> == "tag"
+                  - step:
+                      type: BuildAndPushDockerRegistry
+                      name: Build And Push on Branch
+                      identifier: BuildAndPushDockerRegistry_1
+                      spec:
+                        connectorRef: Plugins_Docker_Hub_Connector
+                        repo: plugins/sftp
+                        tags:
+                          - linux-amd64
+                        caching: false
+                        dockerfile: docker/Dockerfile.linux.amd64
+                      when:
+                        stageStatus: Success
+                        condition: |
+                          <+codebase.build.type> == "branch"
+        - stage:
+            identifier: linarm64
+            type: CI
+            name: linux-arm64
+            description: ""
+            spec:
+              cloneCodebase: true
+              caching:
+                enabled: false
+                paths: []
+              platform:
+                os: Linux
+                arch: Arm64
+              runtime:
+                type: Cloud
+                spec: {}
+              execution:
+                steps:
+                  - step:
+                      identifier: buildpush
+                      type: Run
+                      name: Build Binary
+                      spec:
+                        connectorRef: Plugins_Docker_Hub_Connector
+                        image: golang:1.21
+                        shell: Sh
+                        command: |-
+                          # force go modules
+                          export GOPATH=""
+
+                          # disable cgo
+                          export CGO_ENABLED=0
+
+                          set -e
+                          set -x
+
+                          # linux
+                          export GOOS=linux GOARCH=arm64
+
+                          go build -v -a -tags netgo -o release/linux/arm64/drone-sftp .
+                  - step:
+                      type: Plugin
+                      name: "Build and Push on Tag "
+                      identifier: Plugin_1
+                      spec:
+                        connectorRef: Plugins_Docker_Hub_Connector
+                        image: plugins/docker
+                        settings:
+                          username: drone
+                          password: <+secrets.getValue("Plugins_Docker_Hub_Pat")>
+                          repo: plugins/sftp
+                          dockerfile: docker/Dockerfile.linux.arm64
+                          auto_tag: "true"
+                          auto_tag_suffix: linux-arm64
+                      when:
+                        stageStatus: Success
+                        condition: <+codebase.build.type> == "tag"
+                  - step:
+                      type: BuildAndPushDockerRegistry
+                      name: Build And Push On Branch
+                      identifier: BuildAndPushDockerRegistry_1
+                      spec:
+                        connectorRef: Plugins_Docker_Hub_Connector
+                        repo: plugins/sftp
+                        tags:
+                          - linux-arm64
+                        caching: false
+                        dockerfile: docker/Dockerfile.linux.arm64
+                      when:
+                        stageStatus: Success
+                        condition: <+codebase.build.type> == "branch"
+        - stage:
+            identifier: winamd64
+            type: CI
+            name: windows-amd64
+            description: ""
+            spec:
+              cloneCodebase: true
+              caching:
+                enabled: false
+                paths: []
+              platform:
+                os: Windows
+                arch: Amd64
+              runtime:
+                type: Cloud
+                spec: {}
+              execution:
+                steps:
+                  - step:
+                      identifier: build_amd64ltsc2022
+                      type: Run
+                      name: Build Binary
+                      spec:
+                        connectorRef: Plugins_Docker_Hub_Connector
+                        image: golang:1.21
+                        shell: Sh
+                        command: |-
+                          # force go modules
+                          export GOPATH=""
+
+                          # disable cgo
+                          export CGO_ENABLED=0
+
+                          set -e
+                          set -x
+
+                          # Windows
+                          GOOS=windows
+
+                          go build -v -a -tags netgo -o release/windows/amd64/drone-sftp.exe .
+                  - step:
+                      type: Plugin
+                      name: Build and Push on Tag
+                      identifier: Plugin_1
+                      spec:
+                        connectorRef: Plugins_Docker_Hub_Connector
+                        image: plugins/docker
+                        settings:
+                          username: drone
+                          password: <+secrets.getValue("Plugins_Docker_Hub_Pat")>
+                          repo: plugins/sftp
+                          dockerfile: docker/Dockerfile.windows.ltsc2022
+                          auto_tag: "true"
+                          auto_tag_suffix: windows-ltsc2022-amd64
+                      when:
+                        stageStatus: Success
+                        condition: <+codebase.build.type> == "tag"
+                  - step:
+                      type: BuildAndPushDockerRegistry
+                      name: Build And Push on Branch
+                      identifier: BuildAndPushDockerRegistry_1
+                      spec:
+                        connectorRef: Plugins_Docker_Hub_Connector
+                        repo: plugins/sftp
+                        tags:
+                          - windows-ltsc2022-amd64
+                        caching: false
+                        dockerfile: docker/Dockerfile.windows.ltsc2022
+                      when:
+                        stageStatus: Success
+                        condition: <+codebase.build.type> == "branch"
+              buildIntelligence:
+                enabled: false
+        - stage:
+            name: windows-1809
+            identifier: windows1809
+            description: ""
+            type: CI
+            spec:
+              cloneCodebase: true
+              caching:
+                enabled: true
+              buildIntelligence:
+                enabled: true
+              infrastructure:
+                type: VM
+                spec:
+                  type: Pool
+                  spec:
+                    poolName: windows-2019
+                    os: Windows
+              execution:
+                steps:
+                  - step:
+                      type: Run
+                      name: Build
+                      identifier: Build
+                      spec:
+                        connectorRef: account.harnessImage
+                        image: golang:1.21
+                        shell: Sh
+                        command: |-
+                          # force go modules
+                          export GOPATH=""
+
+                          # disable cgo
+                          export CGO_ENABLED=0
+
+                          set -e
+                          set -x
+
+                          # Windows
+                          GOOS=windows
+
+                          go build -v -a -tags netgo -o release/windows/amd64/drone-sftp.exe .
+                  - step:
+                      type: Plugin
+                      name: Build and Push on Tag
+                      identifier: Plugin_1
+                      spec:
+                        connectorRef: Plugins_Docker_Hub_Connector
+                        image: plugins/docker
+                        settings:
+                          username: drone
+                          password: <+secrets.getValue("Plugins_Docker_Hub_Pat")>
+                          repo: plugins/sftp
+                          dockerfile: docker/Dockerfile.windows.1809
+                          auto_tag: "true"
+                          auto_tag_suffix: windows-1809-amd64
+                      when:
+                        stageStatus: Success
+                        condition: <+codebase.build.type> == "tag"
+                  - step:
+                      type: BuildAndPushDockerRegistry
+                      name: Build And Push on Branch
+                      identifier: BuildAndPushDockerRegistry_1
+                      spec:
+                        connectorRef: Plugins_Docker_Hub_Connector
+                        repo: plugins/sftp
+                        tags:
+                          - windows-1809-amd64
+                        caching: false
+                        dockerfile: docker/Dockerfile.windows.1809
+                      when:
+                        stageStatus: Success
+                        condition: <+codebase.build.type> == "branch"
+            delegateSelectors:
+              - windows-vm
+    - stage:
+        name: Manifest and Release
+        identifier: Manifest_and_Release
+        description: ""
+        type: CI
+        spec:
+          cloneCodebase: true
+          caching:
+            enabled: false
+            paths: []
+          platform:
+            os: Linux
+            arch: Amd64
+          runtime:
+            type: Cloud
+            spec: {}
+          execution:
+            steps:
+              - step:
+                  type: Plugin
+                  name: Manifest
+                  identifier: Manifest
+                  spec:
+                    connectorRef: Plugins_Docker_Hub_Connector
+                    image: plugins/manifest
+                    settings:
+                      username: drone
+                      password: <+secrets.getValue("Plugins_Docker_Hub_Pat")>
+                      auto_tag: "true"
+                      ignore_missing: "true"
+                      spec: docker/manifest.tmpl
+                  when:
+                    stageStatus: Success
+                    condition: |
+                      <+codebase.build.type> == "tag" || "branch"
+  allowStageExecutions: true
+  identifier: dronesftprharness
+  name: drone-sftp-harness
