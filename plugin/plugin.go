@@ -37,6 +37,9 @@ type (
 		Port        int      `envconfig:"PLUGIN_PORT"`
 		Username    string   `envconfig:"PLUGIN_USERNAME"`
 		Password    string   `envconfig:"PLUGIN_PASSWORD"`
+		Key         string   `envconfig:"PLUGIN_KEY"`
+		KeyPath     string   `envconfig:"PLUGIN_KEY_PATH"`
+		Passphrase  string   `envconfig:"PLUGIN_PASSPHRASE"`
 		Files       []string `envconfig:"PLUGIN_FILES"`
 		Destination string   `envconfig:"PLUGIN_DESTINATION_PATH"`
 	}
@@ -130,8 +133,8 @@ func verifyArgs(args *Args) error {
 		return fmt.Errorf("no username provided: %w", errConfiguration)
 	}
 
-	if args.Password == "" {
-		return fmt.Errorf("no password provided: %w", errConfiguration)
+	if args.Password == "" && args.Key == "" && args.KeyPath == "" {
+		return fmt.Errorf("no password or key provided: %w", errConfiguration)
 	}
 
 	if args.Host == "" {
@@ -171,12 +174,15 @@ func findFileUploads(args *Args) ([]string, error) {
 }
 
 func createSftpClient(args *Args) (*sftp.Client, error) {
+	authMethods, err := createSftpAuthMethods(args)
+	if err != nil {
+		return nil, err
+	}
+
 	server := fmt.Sprintf("%s:%d", args.Host, args.Port)
 	config := &ssh.ClientConfig{
-		User: args.Username,
-		Auth: []ssh.AuthMethod{
-			ssh.Password(args.Password),
-		},
+		User:            args.Username,
+		Auth:            authMethods,
 		HostKeyCallback: ssh.InsecureIgnoreHostKey(),
 	}
 
@@ -195,6 +201,54 @@ func createSftpClient(args *Args) (*sftp.Client, error) {
 	}
 
 	return client, nil
+}
+
+func createSftpAuthMethods(args *Args) ([]ssh.AuthMethod, error) {
+	var methods []ssh.AuthMethod
+
+	if args.Password != "" {
+		methods = append(methods, ssh.Password(args.Password))
+	}
+
+	if args.Key != "" {
+		signer, err := parsePrivateKey([]byte(args.Key), []byte(args.Passphrase))
+		if err != nil {
+			return nil, err
+		}
+		methods = append(methods, ssh.PublicKeys(signer))
+	}
+
+	if args.KeyPath != "" {
+		buffer, err := os.ReadFile(args.KeyPath)
+		if err != nil {
+			return nil, fmt.Errorf("could not read private key: %w", err)
+		}
+		signer, err := parsePrivateKey(buffer, []byte(args.Passphrase))
+		if err != nil {
+			return nil, err
+		}
+		methods = append(methods, ssh.PublicKeys(signer))
+	}
+
+	if len(methods) > 0 {
+		return methods, nil
+	} else {
+		return nil, fmt.Errorf("could not determinate an sftp auth method")
+	}
+}
+
+func parsePrivateKey(key []byte, passphrase []byte) (ssh.Signer, error) {
+	var signer ssh.Signer
+	var err error
+	if len(passphrase) > 0 {
+		signer, err = ssh.ParsePrivateKeyWithPassphrase(key, passphrase)
+	} else {
+		signer, err = ssh.ParsePrivateKey(key)
+	}
+	if err != nil {
+		return nil, fmt.Errorf("could not parse private key: %w", err)
+	}
+	return signer, nil
 }
 
 func createDirectory(client *sftp.Client, directory string) error {
