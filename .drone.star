@@ -34,7 +34,7 @@ def testing(ctx):
         "steps": [
             {
                 "name": "lint",
-                "image": "golang:1.18",
+                "image": "golang:1.26.10-bookworm@sha256:632dff7351799a5a9954a48dc06670ade72ee44e8c351cdc0e5a57af2fea21af",
                 "pull": "always",
                 "commands": [
                     "go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest",
@@ -50,7 +50,7 @@ def testing(ctx):
             },
             {
                 "name": "test",
-                "image": "golang:1.18",
+                "image": "golang:1.26.10-bookworm@sha256:632dff7351799a5a9954a48dc06670ade72ee44e8c351cdc0e5a57af2fea21af",
                 "commands": [
                     "go test -cover ./...",
                 ],
@@ -90,7 +90,7 @@ def linux(ctx, arch):
     steps = [
         {
             "name": "environment",
-            "image": "golang:1.18",
+            "image": "golang:1.26.10-bookworm@sha256:632dff7351799a5a9954a48dc06670ade72ee44e8c351cdc0e5a57af2fea21af",
             "pull": "always",
             "environment": {
                 "CGO_ENABLED": "0",
@@ -102,7 +102,7 @@ def linux(ctx, arch):
         },
         {
             "name": "build",
-            "image": "golang:1.18",
+            "image": "golang:1.26.10-bookworm@sha256:632dff7351799a5a9954a48dc06670ade72ee44e8c351cdc0e5a57af2fea21af",
             "environment": {
                 "CGO_ENABLED": "0",
             },
@@ -198,6 +198,7 @@ def windows(ctx, version):
                     "CGO_ENABLED": "0",
                 },
                 "commands": [
+                    ". ./scripts/setup-go-windows.ps1",
                     "go version",
                     "go env",
                 ],
@@ -207,7 +208,7 @@ def windows(ctx, version):
                 "environment": {
                     "CGO_ENABLED": "0",
                 },
-                "commands": build,
+                "commands": [". ./scripts/setup-go-windows.ps1"] + build,
             },
             {
                 "name": "docker",

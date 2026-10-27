@@ -34,7 +34,7 @@ pipeline:
                   identifier: Lint
                   spec:
                     connectorRef: Plugins_Docker_Hub_Connector
-                    image: golang:1.21
+                    image: golang:1.26.10-bookworm@sha256:632dff7351799a5a9954a48dc06670ade72ee44e8c351cdc0e5a57af2fea21af
                     shell: Sh
                     command: |-
                       go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
@@ -46,7 +46,7 @@ pipeline:
                   identifier: Testing
                   spec:
                     connectorRef: Plugins_Docker_Hub_Connector
-                    image: golang:1.21
+                    image: golang:1.26.10-bookworm@sha256:632dff7351799a5a9954a48dc06670ade72ee44e8c351cdc0e5a57af2fea21af
                     shell: Sh
                     command: go test -cover ./...
     - parallel:
@@ -74,7 +74,7 @@ pipeline:
                       identifier: Run_1
                       spec:
                         connectorRef: Plugins_Docker_Hub_Connector
-                        image: golang:1.21
+                        image: golang:1.26.10-bookworm@sha256:632dff7351799a5a9954a48dc06670ade72ee44e8c351cdc0e5a57af2fea21af
                         shell: Sh
                         command: |-
                           # force go modules
@@ -146,7 +146,7 @@ pipeline:
                       name: Build Binary
                       spec:
                         connectorRef: Plugins_Docker_Hub_Connector
-                        image: golang:1.21
+                        image: golang:1.26.10-bookworm@sha256:632dff7351799a5a9954a48dc06670ade72ee44e8c351cdc0e5a57af2fea21af
                         shell: Sh
                         command: |-
                           # force go modules
@@ -217,7 +217,7 @@ pipeline:
                       name: Build Binary
                       spec:
                         connectorRef: Plugins_Docker_Hub_Connector
-                        image: golang:1.21
+                        image: golang:1.26.10-windowsservercore-ltsc2022@sha256:c3eadda68ea666345f08d09104362a03a255e7ae1ff42d1b3897f4dbd698e222
                         shell: Sh
                         command: |-
                           # force go modules
@@ -293,6 +293,8 @@ pipeline:
                       spec:
                         connectorRef: account.harnessImage
                         image: golang:1.21
+                        envVariables:
+                          GOTOOLCHAIN: go1.26.10
                         shell: Sh
                         command: |-
                           # force go modules
